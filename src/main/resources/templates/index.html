@@ -4,7 +4,26 @@
 <body>
 <div th:replace="fragments/navigation :: navigation"></div>
 <div class="container">
-    Проект - Автонарушители.
+    <div class="row">
+        <table class="table w-auto table-layout-fixed">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Название</th>
+                <th scope="col">Описание</th>
+                <th scope="col">Адрес</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="accident, iterStat: ${accidents}">
+                <td th:text="${iterStat.index + 1}"/>
+                <td th:text="${accident.name}"/>
+                <td th:text="${accident.text}"/>
+                <td th:text="${accident.address}"/>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 </body>
 </html>
