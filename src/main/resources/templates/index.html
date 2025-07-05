@@ -17,7 +17,14 @@
             <tbody>
             <tr th:each="accident, iterStat: ${accidents}">
                 <td th:text="${iterStat.index + 1}"/>
-                <td th:text="${accident.name}"/>
+
+                <td>
+                    <a th:href="@{|/formUpdateAccident?id=${accident.id}|}">
+                        <i class="fa fa-edit"></i>
+                        <span th:text="${accident.name}"></span>
+                    </a>
+                </td>
+
                 <td th:text="${accident.text}"/>
                 <td th:text="${accident.address}"/>
             </tr>
