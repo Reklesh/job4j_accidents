@@ -16,17 +16,17 @@ public class MemoryAccidentRepository implements AccidentRepository {
 
     private MemoryAccidentRepository() {
         save(new Accident(0, "ДТП", "Столкновение легковых авто", "ул. Ленина, 10",
-                new AccidentType()));
+                new AccidentType(), new HashSet<>()));
         save(new Accident(0, "Наезд", "Наезд на пешехода", "ул. Пушкина, 5",
-                new AccidentType()));
+                new AccidentType(), new HashSet<>()));
         save(new Accident(0, "Парковка", "ДТП на парковке", "ул. Советская, 20",
-                new AccidentType()));
+                new AccidentType(), new HashSet<>()));
         save(new Accident(0, "Выезд", "Выезд через две сплошные", "М-4, 15 км",
-                new AccidentType()));
+                new AccidentType(), new HashSet<>()));
         save(new Accident(0, "Разворот", "Разворот в неположенном месте", "ул. Мира, 3",
-                new AccidentType()));
+                new AccidentType(), new HashSet<>()));
         save(new Accident(0, "ДТП", "Автобус столкнулся с авто", "ул. Красная, 25",
-                new AccidentType()));
+                new AccidentType(), new HashSet<>()));
     }
 
     @Override

@@ -1,5 +1,6 @@
 package ru.job4j.accidents.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.job4j.accidents.model.Accident;
 import ru.job4j.accidents.model.AccidentType;
+import ru.job4j.accidents.model.Rule;
 import ru.job4j.accidents.service.accident.AccidentService;
 
 import java.util.ArrayList;
@@ -27,11 +29,18 @@ public class AccidentController {
         types.add(new AccidentType(2, "Машина и человек"));
         types.add(new AccidentType(3, "Машина и велосипед"));
         model.addAttribute("types", types);
+        List<Rule> rules = List.of(
+                new Rule(1, "Статья. 1"),
+                new Rule(2, "Статья. 2"),
+                new Rule(3, "Статья. 3")
+        );
+        model.addAttribute("rules", rules);
         return "accidents/createAccident";
     }
 
     @PostMapping("/saveAccident")
-    public String save(@ModelAttribute Accident accident) {
+    public String save(@ModelAttribute Accident accident, HttpServletRequest req) {
+        String[] ids = req.getParameterValues("rIds");
         accidents.save(accident);
         return "redirect:/index";
     }
