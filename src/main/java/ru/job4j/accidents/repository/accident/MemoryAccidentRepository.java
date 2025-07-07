@@ -16,7 +16,7 @@ public class MemoryAccidentRepository implements AccidentRepository {
     private final AtomicInteger nextId = new AtomicInteger();
     private final Map<Integer, Accident> accidents = new ConcurrentHashMap<>();
 
-    private MemoryAccidentRepository() {
+    public MemoryAccidentRepository() {
         save(new Accident(0, "ДТП", "Столкновение легковых авто", "ул. Ленина, 10"));
         save(new Accident(0, "Наезд", "Наезд на пешехода", "ул. Пушкина, 5"));
         save(new Accident(0, "Парковка", "ДТП на парковке", "ул. Советская, 20"));
