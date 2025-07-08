@@ -1,11 +1,13 @@
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="en">
 <nav th:fragment="navigation" class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="collapse navbar-collapse">
-            <div class="navbar-nav me-auto">
-                <a class="nav-item nav-link" href="/">Главная</a>
-                <a class="nav-item nav-link" th:href="@{/accidents}">Инциденты</a>
-                <a class="nav-item nav-link active" th:href="@{/createAccident}">Добавить Инцидент</a>
-                <a class="nav-item nav-link" th:text="${user}">Имя пользователя</a>
-            </div>
+    <div class="collapse navbar-collapse">
+        <div class="navbar-nav me-auto">
+            <a class="nav-item nav-link" href="/">Главная</a>
+            <a class="nav-item nav-link" th:href="@{/accidents}">Инциденты</a>
+            <a class="nav-item nav-link" th:href="@{/createAccident}">Добавить Инцидент</a>
+            <a class="nav-item nav-link" sec:authentication="name">Имя пользователя</a>
         </div>
+    </div>
 </nav>
