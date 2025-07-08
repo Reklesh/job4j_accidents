@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class LoginController {
+
     @GetMapping("/login")
     public String loginPage(@RequestParam(value = "error", required = false) String error,
                             @RequestParam(value = "logout", required = false) String logout,
@@ -24,7 +25,7 @@ public class LoginController {
             errorMessage = "You have been successfully logged out !!";
         }
         model.addAttribute("errorMessage", errorMessage);
-        return "login";
+        return "users/login";
     }
 
     @GetMapping("/logout")
@@ -33,6 +34,6 @@ public class LoginController {
         if (auth != null) {
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
-        return "redirect:/login?logout=true";
+        return "redirect:/users/login?logout=true";
     }
 }

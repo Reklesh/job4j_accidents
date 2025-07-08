@@ -1,27 +1,25 @@
 package ru.job4j.accidents;
 
-import javax.sql.DataSource;
-
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.SecurityFilterChain;
+
+import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
+@AllArgsConstructor
 public class SecurityConfig {
 
     private final DataSource dataSource;
-
-    public SecurityConfig(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -29,22 +27,16 @@ public class SecurityConfig {
     }
 
     @Bean
-    public UserDetailsService userDetailsService(PasswordEncoder encoder) {
+    public UserDetailsService userDetailsService() {
         JdbcUserDetailsManager manager = new JdbcUserDetailsManager(dataSource);
-
-        if (!manager.userExists("user")) {
-            manager.createUser(User.withUsername("user")
-                    .password(encoder.encode("123456"))
-                    .roles("USER")
-                    .build());
-        }
-        if (!manager.userExists("admin")) {
-            manager.createUser(User.withUsername("admin")
-                    .password(encoder.encode("123456"))
-                    .roles("USER", "ADMIN")
-                    .build());
-        }
-
+        manager.setUsersByUsernameQuery(
+                "SELECT username, password, enabled FROM users WHERE username = ?");
+        manager.setAuthoritiesByUsernameQuery(
+                """
+                        SELECT u.username, a.authority FROM users u
+                        JOIN authorities a ON u.authority_id = a.id
+                        WHERE u.username = ?
+                        """);
         return manager;
     }
 
@@ -52,7 +44,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/login", "/reg", "/css/**", "/js/**", "/images/**").permitAll()
                         .anyRequest().hasAnyRole("USER", "ADMIN")
                 )
                 .formLogin(form -> form
@@ -66,7 +58,7 @@ public class SecurityConfig {
                         .invalidateHttpSession(true)
                         .permitAll()
                 )
-                .csrf(csrf -> csrf.disable());
+                .csrf(Customizer.withDefaults());
 
         return http.build();
     }
